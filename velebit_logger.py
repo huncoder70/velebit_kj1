@@ -76,4 +76,4 @@ else:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writerow(dfdata)
-print("*")
+
