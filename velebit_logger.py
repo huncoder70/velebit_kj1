@@ -16,6 +16,7 @@ __status__ = "Development"
 import csv
 from pymodbus3.client.sync import ModbusTcpClient
 from pathlib import Path
+import time
 
 my_file = Path("velebit.csv")
 fieldnames = ['PT-101',
@@ -46,16 +47,18 @@ fieldnames = ['PT-101',
               'TT-453',
               'TT-454',
               'TT-455',
-              'ST-551']
+              'ST-551',
+              'TIME']
 
 client = ModbusTcpClient('127.0.0.1')
 dfdata = {}
-result = client.read_holding_registers(121, 28)
-
+result = client.read_holding_registers(121, 29)
+localtime = time.asctime( time.localtime(time.time()) )
 for j in range(0, len(result.registers)):
     result.registers[j] = result.registers[j] / float(10)
     dfdata[fieldnames[j]] = result.registers[j]
 
+dfdata[fieldnames[28]] = localtime
 client.close()
 if my_file.exists():
     fileExist = True
